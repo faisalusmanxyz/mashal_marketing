@@ -14,27 +14,10 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool passwordFlag = true;
-  var from_key = GlobalKey<FormState>();
-String error="";
-  void login() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-    try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user != null) {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()));
-      }
-    } on FirebaseAuthException catch (e) {
-      error=e.code.toString();
-      setState(() {
+  var fromKey = GlobalKey<FormState>();
+  String error = "";
 
-      });
-      print(e.code.toString());
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +28,21 @@ String error="";
         child: Container(
           padding: EdgeInsets.symmetric(
               horizontal: 0.1 * width, vertical: 0.2 * height),
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           child: Form(
-            key: from_key,
+            key: fromKey,
             child: Column(
               children: [
                 const Text("Login",
                     style:
                         TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-                SizedBox(height: 0.05*height,),
-                Text(error,style: const TextStyle(fontSize: 20,color: Colors.red),),
+                SizedBox(
+                  height: 0.05 * height,
+                ),
+                Text(
+                  error,
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                ),
                 SizedBox(
                   height: 0.02 * height,
                 ),
@@ -124,5 +112,23 @@ String error="";
         ),
       ),
     );
+  }
+
+  void login() async {
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      if (userCredential.user != null) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      }
+    } on FirebaseAuthException catch (e) {
+      error = e.code.toString();
+      setState(() {});
+      print(e.code.toString());
+    }
   }
 }

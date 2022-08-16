@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:marshall_marketing/prictac.dart';
-import 'home_screen.dart';
-import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:marshall_marketing/signIn_screen.dart';
+
+import 'SignUp_screen.dart';
+import 'home_screen.dart';
 
 void main()async {
   try{
@@ -18,6 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        "signup":(context)=>const SignUpScreen(),
+        "login":(context)=>const SignInScreen(),
+        "home":(context)=>const HomeScreen()
+      },
       debugShowCheckedModeBanner: false,
       title: 'Marshall_Marketing',
       theme: ThemeData(

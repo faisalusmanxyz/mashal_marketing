@@ -1,8 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -11,34 +11,14 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  TextEditingController nameController=TextEditingController();
-  TextEditingController emailController=TextEditingController();
-  TextEditingController passwordController=TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool passwordFlag = true;
-  GlobalKey<FormState> _formkey=GlobalKey<FormState>();
-void createUser()async{
-  String name=nameController.text.trim();
-  String email=emailController.text.trim();
-  String password=passwordController.text.trim();
-  if(!_formkey.currentState!.validate()){
-    return;
-  }
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password);
-FirebaseFirestore.instance.collection("user").add({"name":name,"uid":userCredential.user?.uid,"email":userCredential.user?.email});
-if(userCredential.user!=null){
-  Navigator.pop(context);
-}
-    //userCredential.user?.updateDisplayName(name,);
-   // print(userCredential.user?.displayName);
-  } on FirebaseAuthException catch(e){
-    var snackBar = SnackBar(
-      content: Text(e.code.toString()),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-}
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+
+
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -48,19 +28,20 @@ if(userCredential.user!=null){
         child: Container(
           padding: EdgeInsets.symmetric(
               horizontal: 0.1 * width, vertical: 0.2 * height),
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           child: Form(
             key: _formkey,
             child: Column(
               children: [
                 const Text("Create Account",
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                    style:
+                        TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                 SizedBox(
                   height: 0.04 * height,
                 ),
-                 TextFormField(
-                   controller: nameController,
-                   validator: RequiredValidator(errorText: "username Required"),
+                TextFormField(
+                  controller: nameController,
+                  validator: RequiredValidator(errorText: "username Required"),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.person),
                     hintText: "username",
@@ -69,12 +50,11 @@ if(userCredential.user!=null){
                 SizedBox(
                   height: 0.04 * height,
                 ),
-                 TextFormField(
-                   controller: emailController,
-                   validator: MultiValidator([
-
-                     RequiredValidator(errorText: "Email field is Required"),
-                   ]),
+                TextFormField(
+                  controller: emailController,
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: "Email field is Required"),
+                  ]),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     hintText: "Email",
@@ -84,8 +64,11 @@ if(userCredential.user!=null){
                   height: 0.04 * height,
                 ),
                 TextFormField(
-                  validator: MultiValidator([RequiredValidator(errorText: "Password Required "),
-                    MinLengthValidator(8, errorText: 'password must be at least 8 digits long'),]),
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: "Password Required "),
+                    MinLengthValidator(8,
+                        errorText: 'password must be at least 8 digits long'),
+                  ]),
                   controller: passwordController,
                   obscureText: passwordFlag,
                   decoration: InputDecoration(
@@ -109,8 +92,9 @@ if(userCredential.user!=null){
                     width: 0.7 * width,
                     child: ElevatedButton(
                         onPressed: () {
-createUser();
-                        }, child: const Text("Sign up"))),
+                          createUser();
+                        },
+                        child: const Text("Sign up"))),
                 const Text("or"),
                 SizedBox(
                   width: 0.7 * width,
@@ -119,7 +103,8 @@ createUser();
                       Navigator.pushNamed(context, 'login');
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white24),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.white24),
                     ),
                     child: const Text("Log in"),
                   ),
@@ -130,5 +115,33 @@ createUser();
         ),
       ),
     );
+  }
+
+  void createUser() async {
+    String name = nameController.text.trim();
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
+    if (!_formkey.currentState!.validate()) {
+      return;
+    }
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      FirebaseFirestore.instance.collection("user").add({
+        "name": name,
+        "uid": userCredential.user?.uid,
+        "email": userCredential.user?.email
+      });
+      if (userCredential.user != null) {
+        Navigator.pop(context);
+      }
+      //userCredential.user?.updateDisplayName(name,);
+      // print(userCredential.user?.displayName);
+    } on FirebaseAuthException catch (e) {
+      var snackBar = SnackBar(
+        content: Text(e.code.toString()),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }
