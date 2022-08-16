@@ -40,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                               builder: (context) => const SignInScreen()));
                       setState(() {
-                        _currentPage = 0;
+                       
                       });
                     },
                     icon: const Icon(Icons.exit_to_app));
