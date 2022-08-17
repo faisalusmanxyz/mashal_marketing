@@ -2,7 +2,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:marshall_marketing/profile_screen.dart';
-import 'package:marshall_marketing/signIn_screen.dart';
 import 'package:marshall_marketing/society_screen.dart';
 
 import 'form_screen.dart';
@@ -35,13 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 return IconButton(
                     onPressed: () async {
                       FirebaseAuth.instance.signOut();
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const SignInScreen()));
+                      // await Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => SignInScreen()));
                       setState(() {
-                       
+
                       });
+
                     },
                     icon: const Icon(Icons.exit_to_app));
               }

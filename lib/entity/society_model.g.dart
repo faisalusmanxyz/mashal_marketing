@@ -6,7 +6,8 @@ part of 'society_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SocityModel _$SocityModelFromJson(Map<String, dynamic> json) => SocityModel(
+SocietyModel _$SocityModelFromJson(Map<String, dynamic> json) => SocietyModel(
+      uid: json['uid'] as String,
       plotSize: json['plotSize'] as String,
       nomineeRelationship: json['nomineeRelationship'] as String,
       typeNomineeCnic: json['typeNomineeCnic'] as String,
@@ -28,7 +29,7 @@ SocityModel _$SocityModelFromJson(Map<String, dynamic> json) => SocityModel(
           .toList(),
     );
 
-Map<String, dynamic> _$SocityModelToJson(SocityModel instance) =>
+Map<String, dynamic> _$SocityModelToJson(SocietyModel instance) =>
     <String, dynamic>{
       'nameApplicant': instance.nameApplicant,
       'cnicApplicant': instance.cnicApplicant,
@@ -47,4 +48,5 @@ Map<String, dynamic> _$SocityModelToJson(SocityModel instance) =>
       'nomineeRelationship': instance.nomineeRelationship,
       'plotSize': instance.plotSize,
       'SocietyName': instance.SocietyName,
+          'uid':instance.uid
     };

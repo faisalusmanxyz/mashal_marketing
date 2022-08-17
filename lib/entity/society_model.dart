@@ -3,7 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 part 'society_model.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class SocityModel {
+class SocietyModel {
+    String uid="";
   final String nameApplicant;
   final String cnicApplicant;
   final String typeApplicant;
@@ -26,8 +27,9 @@ class SocityModel {
   final String plotSize;
   final List<String> SocietyName;
 
-  SocityModel(
-      {required this.plotSize,
+  SocietyModel(
+      {
+        required this.plotSize,
       required this.nomineeRelationship,
       required this.typeNomineeCnic,
       required this.nomineeType,
@@ -43,17 +45,17 @@ class SocityModel {
       required this.resApplicant,
       required this.typeApplicant,
       required this.typeApplicantCnic,
-      required this.SocietyName});
+      required this.SocietyName, required String uid});
 
-  factory SocityModel.fromJson(Map<String, dynamic> json) =>
+  factory SocietyModel.fromJson(Map<String, dynamic> json) =>
       _$SocityModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SocityModelToJson(this);
 
 
-  static CollectionReference<SocityModel> collection() {
-    return FirebaseFirestore.instance.collection('societyForm').withConverter<SocityModel>(
-        fromFirestore: (snapshot, _) => SocityModel.fromJson(snapshot.data()!),
+  static CollectionReference<SocietyModel> collection() {
+    return FirebaseFirestore.instance.collection('societyForm').withConverter<SocietyModel>(
+        fromFirestore: (snapshot, _) => SocietyModel.fromJson(snapshot.data()!),
         toFirestore: (callCenter, _) => callCenter.toJson());
   }
 

@@ -1,10 +1,15 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'SignUp_screen.dart';
+import 'entity/society_model.dart';
 import 'home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+  final SocietyModel socityModelObj;
+   SignInScreen({Key? key,required this.socityModelObj}) : super(key: key);
+
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -13,6 +18,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late final SocietyModel socityModelObj;
   bool passwordFlag = true;
   var fromKey = GlobalKey<FormState>();
   String error = "";
@@ -33,6 +39,7 @@ class _SignInScreenState extends State<SignInScreen> {
             key: fromKey,
             child: Column(
               children: [
+
                 const Text("Login",
                     style:
                         TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
@@ -73,6 +80,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             : const Icon(Icons.visibility),
                       )),
                 ),
+
                 Align(
                   alignment: Alignment.topRight,
                   child: TextButton(
@@ -94,9 +102,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   width: 0.7 * width,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(
+                      Navigator.push(
                         context,
-                        'signup',
+                       MaterialPageRoute(builder: (context)=>SignUpScreen(socityModelobj: widget.socityModelObj,)),
                       );
                     },
                     style: ButtonStyle(
@@ -120,15 +128,18 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user != null) {
+      if (userCredential.user != null && widget.socityModelObj!=null) {
+        widget.socityModelObj.uid=FirebaseAuth.instance.currentUser!.uid;
+        SocietyModel.collection().add(widget.socityModelObj);
+
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const HomeScreen()));
       }
-    } on FirebaseAuthException catch (e) {
-      error = e.code.toString();
+    }  catch (e) {
+      error = e.toString();
       setState(() {});
-      print(e.code.toString());
+      print(e.toString());
     }
   }
 }

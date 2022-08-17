@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:marshall_marketing/entity/society_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:marshall_marketing/signIn_screen.dart';
 import 'comman.dart';
 
 List<String> society = [
@@ -322,10 +323,7 @@ class _FormScreenState extends State<FormScreen> {
   }
 
   Future<void> formValidate() async {
-    if(FirebaseAuth.instance.currentUser==null){
-      Navigator.pushNamed(context, 'login');
-      return;
-    }
+
     if (!formKey.currentState!.validate()) {
       return;
     }
@@ -336,7 +334,7 @@ class _FormScreenState extends State<FormScreen> {
         selectSociety.add(names[i]['name']);
       }
     }
-    SocityModel societyForm = SocityModel(
+    SocietyModel societyForm = SocietyModel(
         nameApplicant: nameApplicantController.text.trim(),
         cnicApplicant: personalCnicApplicantController.text.trim(),
         typeApplicant: personalGroupValue,
@@ -354,11 +352,10 @@ class _FormScreenState extends State<FormScreen> {
         typeNomineeCnic: nomineeCnicSoController.text.trim(),
         nomineeRelationship: nomineeRelationshipController.text.trim(),
         plotSize: plotAreaController.text.trim(),
-        SocietyName: selectSociety);
-    // SocityModel.collection().add(society_form);
-    // Map<String, dynamic> map = society_form.toJson();
-    //  QuerySnapshot<SocityModel> result =  await SocityModel.collection().get();
-    //  result.docs.first.data().
+        SocietyName: selectSociety,
+    uid: ""
+    );
+
 
     try {
       nameApplicantController.clear();
@@ -377,7 +374,12 @@ class _FormScreenState extends State<FormScreen> {
       nomineeRelationshipController.clear();
       plotAreaController.clear();
       //FirebaseFirestore.instance.collection("societyForm").add(map);
-      SocityModel.collection().add(societyForm);
+      if(FirebaseAuth.instance.currentUser==null){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SignInScreen(socityModelObj: societyForm,)));
+        return;
+      }
+      societyForm.uid=FirebaseAuth.instance.currentUser!.uid;
+      SocietyModel.collection().add(societyForm);
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Form successfully stored'),
       ));
@@ -387,7 +389,7 @@ class _FormScreenState extends State<FormScreen> {
     print("ok");
   }
 
-  void salected() {
+  void selected() {
     selectSociety.clear();
     for (var i = 0; i < names.length; i++) {
       if (names[i][society[i]] == true) {

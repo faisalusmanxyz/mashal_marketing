@@ -3,8 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
+import 'entity/society_model.dart';
+
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final SocietyModel socityModelobj;
+  const SignUpScreen({Key? key,required this.socityModelobj}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -14,10 +17,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
   bool passwordFlag = true;
+  bool confirmPasswordFlag = true;
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +42,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: 0.04 * height,
                 ),
+                Text(
+                  passError,
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                ),
+                SizedBox(
+                  height: 0.04 * height,
+                ),
                 TextFormField(
                   controller: nameController,
                   validator: RequiredValidator(errorText: "username Required"),
@@ -54,6 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   controller: emailController,
                   validator: MultiValidator([
                     RequiredValidator(errorText: "Email field is Required"),
+                    EmailValidator(errorText: "Invalid Email")
                   ]),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
@@ -81,6 +92,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           });
                         },
                         icon: passwordFlag
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility),
+                      )),
+                ),
+                SizedBox(
+                  height: 0.04 * height,
+                ),
+                TextFormField(
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: "Confirm Password Required "),
+                    MinLengthValidator(8,
+                        errorText: 'password must be at least 8 digits long'),
+                  ]),
+                  controller: confirmpasswordController,
+                  obscureText: confirmPasswordFlag,
+                  decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      hintText: "Confirm Password",
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            confirmPasswordFlag = !confirmPasswordFlag;
+                          });
+                        },
+                        icon: confirmPasswordFlag
                             ? const Icon(Icons.visibility_off)
                             : const Icon(Icons.visibility),
                       )),
@@ -117,13 +153,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  String passError = "";
+
   void createUser() async {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
+    String confirmPassword = confirmpasswordController.text.trim();
     if (!_formkey.currentState!.validate()) {
+      setState(() {
+        passError = "";
+      });
       return;
     }
+    if (confirmPassword != password) {
+      passError = "Invalid Confirm Password";
+      setState(() {});
+      return;
+    }
+    passError = "";
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -132,8 +180,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         "uid": userCredential.user?.uid,
         "email": userCredential.user?.email
       });
+
       if (userCredential.user != null) {
-        Navigator.pop(context);
+        widget.socityModelobj.uid=FirebaseAuth.instance.currentUser!.uid;
+        SocietyModel.collection().add(widget.socityModelobj);
+        var snackBar = const SnackBar(
+          content: Text("Successfully account created"),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+       Navigator.pushNamed(context, 'home');
       }
       //userCredential.user?.updateDisplayName(name,);
       // print(userCredential.user?.displayName);
