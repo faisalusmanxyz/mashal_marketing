@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
-part 'society_model.g.dart';
 
+
+part 'society_model.g.dart';
 @JsonSerializable(explicitToJson: true)
 class SocietyModel {
     String uid="";
@@ -25,7 +26,8 @@ class SocietyModel {
 
 // plot size variable
   final String plotSize;
-  final List<String> SocietyName;
+  final List<String> societyName;
+   String date;
 
   SocietyModel(
       {
@@ -45,7 +47,7 @@ class SocietyModel {
       required this.resApplicant,
       required this.typeApplicant,
       required this.typeApplicantCnic,
-      required this.SocietyName, required String uid});
+      required this.societyName, required String uid, required this.date});
 
   factory SocietyModel.fromJson(Map<String, dynamic> json) =>
       _$SocityModelFromJson(json);

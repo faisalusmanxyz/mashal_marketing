@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,9 +6,9 @@ import 'entity/society_model.dart';
 import 'home_screen.dart';
 
 class SignInScreen extends StatefulWidget {
-  final SocietyModel socityModelObj;
-   SignInScreen({Key? key,required this.socityModelObj}) : super(key: key);
+  final SocietyModel? societyModelObj;
 
+  SignInScreen({Key? key, this.societyModelObj}) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -22,8 +21,6 @@ class _SignInScreenState extends State<SignInScreen> {
   bool passwordFlag = true;
   var fromKey = GlobalKey<FormState>();
   String error = "";
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -39,19 +36,11 @@ class _SignInScreenState extends State<SignInScreen> {
             key: fromKey,
             child: Column(
               children: [
-
                 const Text("Login",
                     style:
                         TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                 SizedBox(
                   height: 0.05 * height,
-                ),
-                Text(
-                  error,
-                  style: const TextStyle(fontSize: 20, color: Colors.red),
-                ),
-                SizedBox(
-                  height: 0.02 * height,
                 ),
                 TextFormField(
                   controller: emailController,
@@ -80,7 +69,16 @@ class _SignInScreenState extends State<SignInScreen> {
                             : const Icon(Icons.visibility),
                       )),
                 ),
-
+                SizedBox(
+                  height: 0.02 * height,
+                ),
+                Text(
+                  error,
+                  style: const TextStyle(fontSize: 20, color: Colors.red),
+                ),
+                SizedBox(
+                  height: 0.02 * height,
+                ),
                 Align(
                   alignment: Alignment.topRight,
                   child: TextButton(
@@ -94,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     width: 0.7 * width,
                     child: ElevatedButton(
                         onPressed: () {
-                          login();
+                          login(context);
                         },
                         child: const Text("Login"))),
                 const Text("or"),
@@ -104,7 +102,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                       MaterialPageRoute(builder: (context)=>SignUpScreen(socityModelobj: widget.socityModelObj,)),
+                        MaterialPageRoute(
+                            builder: (context) => SignUpScreen(
+                                  societyModelObj: widget.societyModelObj,
+                                )),
                       );
                     },
                     style: ButtonStyle(
@@ -122,24 +123,29 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void login() async {
+  void login(context) async {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user != null && widget.socityModelObj!=null) {
-        widget.socityModelObj.uid=FirebaseAuth.instance.currentUser!.uid;
-        SocietyModel.collection().add(widget.socityModelObj);
+      if (userCredential.user != null && widget.societyModelObj != null) {
+        widget.societyModelObj!.uid = FirebaseAuth.instance.currentUser!.uid;
+        SocietyModel.collection().add(widget.societyModelObj!);
 
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } else if (userCredential.user != null &&
+          widget.societyModelObj == null) {
+        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
       }
-    }  catch (e) {
-      error = e.toString();
+    } on FirebaseException catch (e) {
+      error = e.code.toString();
       setState(() {});
-      print(e.toString());
+      print(e.code.toString());
     }
   }
 }

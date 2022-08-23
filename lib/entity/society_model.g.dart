@@ -8,6 +8,7 @@ part of 'society_model.dart';
 
 SocietyModel _$SocityModelFromJson(Map<String, dynamic> json) => SocietyModel(
       uid: json['uid'] as String,
+      date: json['date'] as String,
       plotSize: json['plotSize'] as String,
       nomineeRelationship: json['nomineeRelationship'] as String,
       typeNomineeCnic: json['typeNomineeCnic'] as String,
@@ -24,7 +25,7 @@ SocietyModel _$SocityModelFromJson(Map<String, dynamic> json) => SocietyModel(
       resApplicant: json['resApplicant'] as String,
       typeApplicant: json['typeApplicant'] as String,
       typeApplicantCnic: json['typeApplicantCnic'] as String,
-      SocietyName: (json['SocietyName'] as List<dynamic>)
+      societyName: (json['SocietyName'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
     );
@@ -47,6 +48,7 @@ Map<String, dynamic> _$SocityModelToJson(SocietyModel instance) =>
       'typeNomineeCnic': instance.typeNomineeCnic,
       'nomineeRelationship': instance.nomineeRelationship,
       'plotSize': instance.plotSize,
-      'SocietyName': instance.SocietyName,
-          'uid':instance.uid
+      'SocietyName': instance.societyName,
+          'uid':instance.uid,
+          'date':instance.date
     };
