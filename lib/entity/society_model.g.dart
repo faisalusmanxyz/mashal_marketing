@@ -6,9 +6,7 @@ part of 'society_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SocietyModel _$SocityModelFromJson(Map<String, dynamic> json) => SocietyModel(
-      uid: json['uid'] as String,
-      date: json['date'] as String,
+SocietyModel _$SocietyModelFromJson(Map<String, dynamic> json) => SocietyModel(
       plotSize: json['plotSize'] as String,
       nomineeRelationship: json['nomineeRelationship'] as String,
       typeNomineeCnic: json['typeNomineeCnic'] as String,
@@ -25,13 +23,16 @@ SocietyModel _$SocityModelFromJson(Map<String, dynamic> json) => SocietyModel(
       resApplicant: json['resApplicant'] as String,
       typeApplicant: json['typeApplicant'] as String,
       typeApplicantCnic: json['typeApplicantCnic'] as String,
-      societyName: (json['SocietyName'] as List<dynamic>)
+      societyName: (json['societyName'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
+      uid: json['uid'] as String,
+      date: json['date'] as String,
     );
 
-Map<String, dynamic> _$SocityModelToJson(SocietyModel instance) =>
+Map<String, dynamic> _$SocietyModelToJson(SocietyModel instance) =>
     <String, dynamic>{
+      'uid': instance.uid,
       'nameApplicant': instance.nameApplicant,
       'cnicApplicant': instance.cnicApplicant,
       'typeApplicant': instance.typeApplicant,
@@ -48,7 +49,6 @@ Map<String, dynamic> _$SocityModelToJson(SocietyModel instance) =>
       'typeNomineeCnic': instance.typeNomineeCnic,
       'nomineeRelationship': instance.nomineeRelationship,
       'plotSize': instance.plotSize,
-      'SocietyName': instance.societyName,
-          'uid':instance.uid,
-          'date':instance.date
+      'societyName': instance.societyName,
+      'date': instance.date,
     };

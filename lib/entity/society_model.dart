@@ -50,9 +50,9 @@ class SocietyModel {
       required this.societyName, required String uid, required this.date});
 
   factory SocietyModel.fromJson(Map<String, dynamic> json) =>
-      _$SocityModelFromJson(json);
+      _$SocietyModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SocityModelToJson(this);
+  Map<String, dynamic> toJson() => _$SocietyModelToJson(this);
 
 
   static CollectionReference<SocietyModel> collection() {
@@ -62,3 +62,4 @@ class SocietyModel {
   }
 
 }
+

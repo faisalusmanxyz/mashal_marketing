@@ -28,23 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Mashaal  Marketing"),
-          actions: [
-            Builder(builder: (context) {
-              if (FirebaseAuth.instance.currentUser != null) {
-                return IconButton(
-                    onPressed: () async {
-                      FirebaseAuth.instance.signOut();
-                      // await Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => SignInScreen()));
-                      setState(() {});
-                    },
-                    icon: const Icon(Icons.exit_to_app));
-              }
-              return const Text("");
-            })
-          ],
+
         ),
         backgroundColor: Colors.blue,
         body: _pages[_currentPage],

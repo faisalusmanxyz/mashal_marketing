@@ -7,23 +7,7 @@ import 'entity/society_model.dart';
 final mashalAppBar = AppBar(
   centerTitle: true,
   title: const Text("Mashaal Marketing"),
-  actions: [
-    Builder(
-      builder: (BuildContext context) {
-        if (FirebaseAuth.instance.currentUser != null) {
-          return IconButton(
-              onPressed: () {
 
-                FirebaseAuth.instance.signOut();
-              //  Navigator.push(context,
-                    //MaterialPageRoute(builder: (context) =>  SignInScreen(socityModelObj: obj,)));
-              },
-              icon: const Icon(Icons.exit_to_app));
-        }
-        return const Text("");
-      },
-    ),
-  ],
 );
 
 InputDecoration textFieldDecoration({label}) {

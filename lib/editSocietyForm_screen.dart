@@ -372,7 +372,7 @@ class _EditSocietyFormState extends State<EditSocietyForm> {
                                     onPressed: () {
                                       formValidate(context);
                                     },
-                                    child: const Text("Submit"))),
+                                    child: const Text("Update"))),
                             const SizedBox(
                               height: 15,
                             ),
