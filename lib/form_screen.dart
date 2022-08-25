@@ -435,6 +435,7 @@ clearTextField();
       societyForm.uid = FirebaseAuth.instance.currentUser!.uid;
 
       setState(() {
+
         isShowProgressIndicator = true;
       });
       await SocietyModel.collection().add(societyForm);

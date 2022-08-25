@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String url = "";
   bool disableButton = false;
   bool contactUsFlag=false;
-
+   bool signOutFlag=false;
   @override
   void initState() {
     // TODO: implement initState
@@ -186,38 +186,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         );
                                       }),
                                 ),
-                                Stack(
-                                  children: [
+
                                     Form(
                                       key: _formKey,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15.0, right: 15),
-                                        child: Container(
-                                          width: 1 * width,
-                                          height: 0.3 * height,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.blueAccent)),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 0.02 * height,
-                                          left: 0.06 * width),
-                                      child: Icon(Icons.message),
-                                    ),
-                                    Padding(
                                       padding:
-                                          EdgeInsets.only(left: 0.150 * width),
+                                          EdgeInsets.only(left: 0.05 * width,right: 0.05*width),
                                       child: TextFormField(
                                         controller: messageController,
                                         decoration: const InputDecoration(
                                             hintText: "Contact Us",
+
                                             hintStyle: TextStyle(fontSize: 20),
-                                            //label: Text("Contact Us"),
-                                            border: InputBorder.none),
+                                            border: OutlineInputBorder()),
                                         maxLines: 6,
                                         onChanged: (value) {
                                           if (value.isNotEmpty) {
@@ -229,7 +210,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         },
                                       ),
                                     )
-                                  ],
+
                                 ),
                                 contactUsFlag? Padding(
                                   padding:    EdgeInsets.only(left: 0.67000 * width,top: 1),
@@ -250,8 +231,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         SizedBox(
                                           height: 0.2 * height,
                                         ),
-                                        ElevatedButton(
-                                            onPressed: () {},
+                                        signOutFlag?const CircularProgressIndicator() :  ElevatedButton(
+                                            onPressed: ()async {
+                                              setState(() {
+                                                signOutFlag=true;
+                                              });
+                                            await  FirebaseAuth.instance.signOut();
+                                            setState(() {
+                                              signOutFlag=false;
+                                            });
+                                            },
                                             child: const Text("Logout")),
                                       ],
                                     );

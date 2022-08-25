@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
           onTap: (index) async {
             _currentPage = index;
+
             // print(FirebaseAuth.instance.currentUser?.email);
             // if ((index == 1 && FirebaseAuth.instance.currentUser == null)) {
             //   await Navigator.pushNamed(context, 'login');
